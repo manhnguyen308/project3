@@ -138,15 +138,15 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            apt-get update && apt-get install -y tar
-      - run:
-          name: Install tar
-          command: |
             aws ec2 describe-instances \
                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
                   --filters "Name=tag:Project,Values=udacity" \
                   --output text >> inventory.txt
             #exit 1
+      - run:
+          name: Install tar
+          command: |
+            yum install -y tar gzip
       - persist_to_workspace:
           root: ~/
           paths:
