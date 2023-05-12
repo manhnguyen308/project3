@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.12.3
   aws-cli: circleci/aws-cli@2.0.3
+  ansible-playbook: orbss/ansible-playbook@0.0.5
 
 
 commands:
@@ -149,10 +150,39 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure
+      - run:
+          name: Delete stack on failure
+          command: |
+            aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+          when: on_fail
 
 
- 
+  configure-infrastructure:
+    docker:
+      - image: ansible-playbook
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["b1:20:fb:a2:ff:a4:7e:57:28:fb:56:3c:87:70:5c:a4"]
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+            yum install -y tar gzip
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+      - run:
+          name: Delete stack on failure
+          command: |
+            aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+          when: on_fail
 
 workflows:
   default:
