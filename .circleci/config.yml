@@ -162,6 +162,7 @@ jobs:
   configure-infrastructure:
     docker:
       - image: ubuntu:latest
+      - image: amazon/aws-cli
     steps:
       #checkout code
       - checkout
@@ -176,7 +177,7 @@ jobs:
             apt-get update && apt-get upgrade -y
             apt-get install -y ansible
             ansible --version
-            yum install -y tar gzip
+            apt-get install -y tar gzip
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             ./aws/install
