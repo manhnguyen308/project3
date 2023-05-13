@@ -12,6 +12,10 @@ commands:
           name: Destroy environment
           when: on_fail
           command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            ./aws/install
+            aws --version
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
             aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
 
@@ -161,8 +165,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: ubuntu:latest
-      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11
     steps:
       #checkout code
       - checkout
@@ -173,27 +176,13 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            export DEBIAN_FRONTEND=noninteractive
-            apt-get update && apt-get upgrade -y
-            apt-get install -y ansible
-            ansible --version
-            apt-get install -y tar gzip
-            apt-get install -y tar curl
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            ./aws/install
-            aws --version
+            apk add --update ansible
       - run:
           name: Configure server
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
-      - run:
-          name: Delete stack on failure
-          command: |
-            aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
-            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
-          when: on_fail
+      - destroy_environment
 
 workflows:
   default:
