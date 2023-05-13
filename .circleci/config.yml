@@ -161,8 +161,9 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: ansible/ansible:latest
+      - image: ubuntu:latest
     steps:
+      #checkout code
       - checkout
       - add_ssh_keys:
           fingerprints: ["b1:20:fb:a2:ff:a4:7e:57:28:fb:56:3c:87:70:5c:a4"]
