@@ -161,7 +161,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: ansible-playbook
+      - image: ansible/ansible:latest
     steps:
       - checkout
       - add_ssh_keys:
@@ -172,6 +172,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
+            ansible --version
             yum install -y tar gzip
       - run:
           name: Configure server
