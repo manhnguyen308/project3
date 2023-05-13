@@ -172,8 +172,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            DEBIAN_FRONTEND=noninteractive
-            apt-get update
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get update && apt-get upgrade -y
             apt-get install -y ansible
             ansible --version
             yum install -y tar gzip
