@@ -170,19 +170,13 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Install ansible
+          name: Install dependencies
           command: |
+            DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
             apt-get update
             apt-get install -y ansible
-      - run:
-          name: Install gzip
-          command: |
-            apt-get update
+            ansible --version
             yum install -y tar gzip
-      - run:
-          name: Install aws cli
-          command: |
-            apt-get update
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             ./aws/install
