@@ -172,7 +172,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
+            DEBIAN_FRONTEND=noninteractive
             apt-get update
             apt-get install -y ansible
             ansible --version
