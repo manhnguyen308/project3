@@ -170,11 +170,26 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Install dependencies
+          name: Install ansible
           command: |
-            apk add --update ansible
-            ansible --version
+            apt-get update
+            apt-get install -y software-properties-common
+            apt-add-repository --yes --update ppa:ansible/ansible
+            apt-get install -y ansible
             yum install -y tar gzip
+      - run:
+          name: Install gzip
+          command: |
+            apt-get update
+            yum install -y tar gzip
+      - run:
+          name: Install aws cli
+          command: |
+            apt-get update
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            ./aws/install
+            aws --version
       - run:
           name: Configure server
           command: |
