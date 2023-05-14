@@ -174,7 +174,7 @@ jobs:
       #checkout code
       - checkout
       - add_ssh_keys:
-          fingerprints: ["b1:20:fb:a2:ff:a4:7e:57:28:fb:56:3c:87:70:5c:a4"]
+          fingerprints: ["0c:5b:b4:6a:ce:e7:42:ee:99:58:09:36:48:c2:fd:f4"]
       - attach_workspace:
           at: ~/
       - run:
@@ -185,11 +185,6 @@ jobs:
           name: Configure server
           command: |
             cd .circleci/ansible
-            if [ -f udacity.pem ]; then
-                echo "File exists."
-            else
-                echo "File does not exist."
-            fi
             chmod 777 udacity.pem
             ansible-playbook -i inventory.txt configure-server.yml --private-key udacity.pem
       - destroy_environment
