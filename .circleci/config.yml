@@ -7,15 +7,22 @@ orbs:
 commands:
   #Rollback on fail
   destroy_environment:
+    parameters:
+      stack_name:
+        type: string
+    when: on_fail
     steps:
       - run:
           name: Destroy environment
-          when: on_fail
           command: |
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             ./aws/install
             aws --version
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set default.region $AWS_DEFAULT_REGION
+            echo $AWS_DEFAULT_REGION
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
             aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
 
@@ -122,26 +129,33 @@ jobs:
       - run:
           name: Ensure back-end infrastructure exists
           command: |
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set default.region $AWS_DEFAULT_REGION
+            echo $AWS_DEFAULT_REGION
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
               --tags project=udapeople \
               --region us-east-1
-            #exit 1
       - run:
           name: Ensure front-end infrastructure exist
           command: |
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set default.region $AWS_DEFAULT_REGION
+            echo $AWS_DEFAULT_REGION
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
               --tags project=udapeople \
               --region us-east-1
-            #exit 1
       - run:
           name: Add back-end ip to ansible inventory
           command: |
+            aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress"
             aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --output text > .circleci/ansible/inventory.txt
       - run:
           name: Install tar
