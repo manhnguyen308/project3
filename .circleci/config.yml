@@ -12,6 +12,7 @@ commands:
           name: Destroy environment
           when: on_fail
           command: |
+            yum install -y unzip
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             ./aws/install
@@ -152,8 +153,8 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --output text > project/.circleci/ansible/inventory.txt
-            cat project/.circleci/ansible/inventory.txt
+            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text | tr -s '\t' '\n' >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
       - run:
           name: Install tar
           command: |
