@@ -24,6 +24,9 @@ commands:
             echo $AWS_DEFAULT_REGION
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
             aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+            #check stack after delete
+            aws cloudformation describe-stacks --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+            aws cloudformation describe-stacks --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
 
 jobs:
   build-frontend:
@@ -169,7 +172,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: python:3.9.4
+      - image: python:3.7-alpine3.11
     steps:
       #checkout code
       - checkout
