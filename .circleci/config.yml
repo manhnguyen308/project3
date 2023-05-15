@@ -169,10 +169,11 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: python:3.9.4
     steps:
       #checkout code
       - checkout
+      - exports
       - add_ssh_keys:
           fingerprints: ["0c:5b:b4:6a:ce:e7:42:ee:99:58:09:36:48:c2:fd:f4"]
       - attach_workspace:
