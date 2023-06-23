@@ -236,7 +236,8 @@ jobs:
       - destroy_environment
 
   deploy-frontend:
-    docker: amazon/aws-cli
+    docker: 
+      - image: amazon/aws-cli
     steps:
       - checkout
       - run:
