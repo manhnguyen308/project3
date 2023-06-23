@@ -39,7 +39,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            echo SUCCESS=$(curl -H "token: e52b52de-ee26-41a5-86e8-e8dcc3d995a5" --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            echo SUCCESS=$(curl -H "token: 7933fe63-4687-4fa1-8426-aa25aa1730ec" --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7})
             if(( $SUCCESS==1 )); 
             then
               cd ~/project/backend
@@ -242,7 +242,19 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update tar gzip aws-cli curl nodejs npm
+            sudo su -c "echo 'deb http://security.debian.org/debian-security bullseye-security main contrib non-free' > /etc/apt/sources.list"
+            sudo apt-get update
+            sudo apt-get install -y unzip
+            #sudo apt-get install -y curl
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            sudo unzip awscliv2.zip
+            sudo ./aws/install
+            sudo aws --version
+            sudo aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            sudo aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            sudo aws configure set default.region $AWS_DEFAULT_REGION
+            sudo echo $AWS_DEFAULT_REGION
+            sudo apt install nodejs npm -y
       - run:
           name: Get backend url
           command: |
