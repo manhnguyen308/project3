@@ -254,7 +254,11 @@ jobs:
             sudo aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
             sudo aws configure set default.region $AWS_DEFAULT_REGION
             sudo echo $AWS_DEFAULT_REGION
+            curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt update
             sudo apt install nodejs npm -y
+            node -v
+            npm -v
       - run:
           name: Get backend url
           command: |
