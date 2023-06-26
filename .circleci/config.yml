@@ -255,6 +255,7 @@ jobs:
             sudo aws configure set default.region $AWS_DEFAULT_REGION
             sudo echo $AWS_DEFAULT_REGION
             sudo apt upgrade
+            sudo apt-get install aptitude
             sudo aptitude install nodejs -y
             node -v
             npm -v
