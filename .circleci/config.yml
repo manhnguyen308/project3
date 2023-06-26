@@ -32,14 +32,10 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            echo SUCCESS=$(curl -H "token: 7933fe63-4687-4fa1-8426-aa25aa1730ec" --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7})
-            if(( $SUCCESS==1 )); 
-            then
-              cd ~/project/backend
-              npm install
-              npm run build
-              npm run migrations:revert
-            fi
+            cd ~/project/backend
+            npm install
+            npm run build
+            npm run migrations:revert
 
 jobs:
   build-frontend:
@@ -307,7 +303,7 @@ jobs:
             apk add --update --no-cache ansible tar gzip nodejs npm curl
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
-            ./awscli-bundle/install
+            ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
             aws --version
       - run:
           name: Get backend url
