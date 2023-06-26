@@ -12,26 +12,16 @@ commands:
           name: Destroy environment
           when: on_fail
           command: |
-            sudo su -c "echo 'deb http://security.debian.org/debian-security bullseye-security main contrib non-free' > /etc/apt/sources.list"
-            sudo apt-get update
-            sudo apt-get install -y unzip
-            #sudo apt-get install -y curl
-            if command -v aws &> /dev/null
-            then
-              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-              sudo unzip -o awscliv2.zip
-              sudo ./aws/install
-            fi
-            sudo aws --version
-            sudo aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-            sudo aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-            sudo aws configure set default.region $AWS_DEFAULT_REGION
-            sudo echo $AWS_DEFAULT_REGION
-            sudo aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
-            sudo aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+            aws --version
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set default.region $AWS_DEFAULT_REGION
+            echo $AWS_DEFAULT_REGION
+            aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
             #check stack after delete
-            sudo aws cloudformation describe-stacks --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
-            sudo aws cloudformation describe-stacks --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+            aws cloudformation describe-stacks --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+            aws cloudformation describe-stacks --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -314,7 +304,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible tar gzip nodejs npm
+            apk add --update --no-cache ansible tar gzip nodejs npm curl aws-cli
       - run:
           name: Get backend url
           command: |
