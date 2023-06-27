@@ -13,25 +13,25 @@
   tasks:
     - name: "Creates directory"
       file:
-        path: "~/project"
+        path: "~/backend"
         state: "directory"
         mode: 0755
 
     - name: "Copy compressed backend folder"
       copy:
-        src: "/root/project/backend/artifact.tar.gz"
-        dest: "~/project/artifact.tar.gz"
+        src: "../../artifact.tar.gz"
+        dest: "~/backend/artifact.tar.gz"
 
     - name: "Extract backend"
       unarchive:
         remote_src: yes
-        src: "~/project/artifact.tar.gz"
-        dest: "~/project"
+        src: "~/backend/artifact.tar.gz"
+        dest: "~/backend"
 
     - name: "Run the web server"
       shell:
         cmd: |
-          cd ~/project
+          cd ~/backend
           npm install
           pm2 stop default
           pm2 start npm -- start --wait-ready
