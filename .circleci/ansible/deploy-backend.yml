@@ -10,22 +10,28 @@
     - ansible_stdout_callback: yaml
   roles:
     - deploy
+  tasks:
+    - name: "Creates directory"
+      file:
+        path: "~/project"
+        state: "directory"
+        mode: 0755
 
-- name: "Copy compressed backend folder"
-  copy:
-    src: "artifact-backend.tar.gz"
-    dest: "~/artifact-backend.tar.gz"
+    - name: "Copy compressed backend folder"
+      copy:
+        src: "artifact-backend.tar.gz"
+        dest: "~/project/artifact-backend.tar.gz"
 
-- name: "Extract backend"
-  unarchive:
-    remote_src: yes
-    src: "~/artifact-backend.tar.gz"
-    dest: "~/project"
+    - name: "Extract backend"
+      unarchive:
+        remote_src: yes
+        src: "~/project/artifact-backend.tar.gz"
+        dest: "~/project"
 
-- name: "Run the web server"
-  shell:
-    cmd: |
-      cd ~/project
-      npm install
-      pm2 stop default
-      pm2 start npm -- start --wait-ready
+    - name: "Run the web server"
+      shell:
+        cmd: |
+          cd ~/project
+          npm install
+          pm2 stop default
+          pm2 start npm -- start --wait-ready
