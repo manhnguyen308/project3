@@ -33,5 +33,6 @@
         cmd: |
           cd ~/backend
           npm install
+          npm i -g pm2
           pm2 stop default
           pm2 start npm -- start --wait-ready
