@@ -19,7 +19,7 @@
 
     - name: "Copy compressed backend folder"
       copy:
-        src: "artifact.tar.gz"
+        src: "/root/project/backend/artifact.tar.gz"
         dest: "~/project/artifact.tar.gz"
 
     - name: "Extract backend"
