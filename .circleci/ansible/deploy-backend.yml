@@ -11,21 +11,15 @@
   roles:
     - deploy
 
-- name: "Creates directory"
-  file:
-    path: "~/project"
-    state: "directory"
-    mode: 0755
-
 - name: "Copy compressed backend folder"
   copy:
     src: "artifact-backend.tar.gz"
-    dest: "~/project/artifact-backend.tar.gz"
+    dest: "~/artifact-backend.tar.gz"
 
 - name: "Extract backend"
   unarchive:
     remote_src: yes
-    src: "~/project/artifact-backend.tar.gz"
+    src: "~/artifact-backend.tar.gz"
     dest: "~/project"
 
 - name: "Run the web server"
