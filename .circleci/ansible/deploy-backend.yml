@@ -12,23 +12,6 @@
   roles:
     - deploy
   tasks:
-    - name: "Creates directory"
-      file:
-        path: "~/backend"
-        state: "directory"
-        mode: 0755
-
-    - name: "Copy compressed backend folder"
-      copy:
-        src: "../../artifact.tar.gz"
-        dest: "~/backend/artifact.tar.gz"
-
-    - name: "Extract backend"
-      unarchive:
-        remote_src: yes
-        src: "~/backend/artifact.tar.gz"
-        dest: "~/backend"
-       
     - name: Update apt repo and cache
       apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
 
@@ -38,10 +21,27 @@
           - nodejs
           - npm
 
+    - name: "Creates directory"
+      file:
+        path: "/home/ubuntu/project3/backend"
+        state: "directory"
+        mode: 0755
+
+    - name: "Copy compressed backend folder"
+      copy:
+        src: "../../artifact.tar.gz"
+        dest: "/home/ubuntu/project3/backend/artifact.tar.gz"
+
+    - name: "Extract backend"
+      unarchive:
+        remote_src: yes
+        src: "/home/ubuntu/project3/backend/artifact.tar.gz"
+        dest: "/home/ubuntu/project3/backend"
+
     - name: "Run the web server"
       shell:
         cmd: |
-          cd ~/backend
+          cd /home/ubuntu/project3/backend
           npm install
           npm i -g pm2
           pm2 stop default
