@@ -23,25 +23,27 @@
 
     - name: "Creates directory"
       file:
-        path: "/home/ubuntu/backend"
+        path: "/home/circleci/workspace/backend"
         state: "directory"
         mode: 0755
 
     - name: "Copy compressed backend folder"
       copy:
         src: "../../artifact.tar.gz"
-        dest: "/home/ubuntu/backend/artifact.tar.gz"
+        dest: "/home/circleci/workspace/backend/artifact.tar.gz"
 
     - name: "Extract backend"
       unarchive:
         remote_src: yes
-        src: "/home/ubuntu/backend/artifact.tar.gz"
-        dest: "/home/ubuntu/backend"
+        src: "/home/circleci/workspace/backend/artifact.tar.gz"
+        dest: "/home/circleci/workspace/backend"
 
     - name: "Run the web server"
       shell:
         cmd: |
-          cd /home/ubuntu/backend
+          pwd
+          ls -lrt
+          cd /home/circleci/workspace/backend
           npm install
           npm i -g pm2
           pm2 stop default
