@@ -23,25 +23,25 @@
 
     - name: "Creates directory"
       file:
-        path: "/home/ubuntu/project3/backend"
+        path: "/home/ubuntu/backend"
         state: "directory"
         mode: 0755
 
     - name: "Copy compressed backend folder"
       copy:
         src: "../../artifact.tar.gz"
-        dest: "/home/ubuntu/project3/backend/artifact.tar.gz"
+        dest: "/home/ubuntu/backend/artifact.tar.gz"
 
     - name: "Extract backend"
       unarchive:
         remote_src: yes
-        src: "/home/ubuntu/project3/backend/artifact.tar.gz"
-        dest: "/home/ubuntu/project3/backend"
+        src: "/home/ubuntu/backend/artifact.tar.gz"
+        dest: "/home/ubuntu/backend"
 
     - name: "Run the web server"
       shell:
         cmd: |
-          cd /home/ubuntu/project3/backend
+          cd /home/ubuntu/backend
           npm install
           npm i -g pm2
           pm2 stop default
