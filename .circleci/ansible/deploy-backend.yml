@@ -27,6 +27,15 @@
         remote_src: yes
         src: "~/backend/artifact.tar.gz"
         dest: "~/backend"
+       
+    - name: Update apt repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+      
+    - name: Install nodejs and npm
+      apt:
+        pkg:
+          - nodejs
+          - npm
 
     - name: "Run the web server"
       shell:
