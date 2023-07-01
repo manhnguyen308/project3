@@ -3,6 +3,7 @@
 - name: "configuration play." 
   hosts: web
   user: ubuntu
+  become: yes
   gather_facts: false
   vars:
     - ansible_python_interpreter: /usr/bin/python3
@@ -30,7 +31,7 @@
        
     - name: Update apt repo and cache
       apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
-      
+
     - name: Install nodejs and npm
       apt:
         pkg:
