@@ -357,7 +357,7 @@ jobs:
           command: |
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
-            --stack-name InitialStack \
+            --stack-name InitialStack-${CIRCLE_WORKFLOW_ID:0:7} \
             --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
       - destroy_environment
@@ -384,7 +384,7 @@ jobs:
 
             echo 'Cleaning up stacks...'
             
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            if [[ "${OldWorkflowID}" =~ "${STACKS[@]}" ]]
             then
               echo 'Workflow confirmed. Cleaning up stacks...'
               aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
