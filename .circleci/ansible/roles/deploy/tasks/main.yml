@@ -1,0 +1,36 @@
+- name: Update apt repo and cache
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: Install nodejs and npm
+  apt:
+    pkg:
+      - nodejs
+      - npm
+
+- name: "Creates directory"
+  file:
+    path: "~/backend"
+    state: "directory"
+    mode: 0755
+
+- name: "Copy compressed backend folder"
+  copy:
+    src: "../../artifact.tar.gz"
+    dest: "~/backend/artifact.tar.gz"
+
+- name: "Extract backend"
+  unarchive:
+    remote_src: yes
+    src: "~/backend/artifact.tar.gz"
+    dest: "~/backend"
+
+- name: "Run the web server"
+  shell:
+    cmd: |
+      pwd
+      ls -lrt
+      cd ~/backend
+      npm install
+      npm i -g pm2
+      pm2 stop default
+      pm2 start npm -- start --wait-ready
