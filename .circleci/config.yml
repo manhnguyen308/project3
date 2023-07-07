@@ -132,7 +132,7 @@ jobs:
           name: Run back-end scan
           command: |
             cd backend
-            #npm install
+            npm install
             npm audit fix --audit-level=critical --force
             npm audit fix
             npm audit --audit-level=critical
@@ -191,7 +191,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["31:59:f8:a3:3e:f6:5c:f2:9c:d7:38:20:db:78:c2:ec"]
+          fingerprints: ["48:32:29:ee:19:cb:3d:2c:cc:7b:4d:a8:cf:b6:52:84"]
       - attach_workspace:
           at: ~/
       - run:
@@ -420,5 +420,3 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      - cleanup:
-          requires: [cloudfront-update]
